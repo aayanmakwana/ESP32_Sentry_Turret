@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentry Turret — Demo Guide</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #ffffff;
+      color: #000000;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+      border-bottom: 3px solid #000000;
+      padding-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      color: #000000;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    header p {
+      color: #444444;
+      margin-top: 8px;
+      font-size: 1rem;
+    }
+
+    /* Section titles */
+    h2 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #000000;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    section {
+      margin-bottom: 48px;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: #f5f5f5;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+    }
+
+    .checklist li .num {
+      background: #000000;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.8rem;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .checklist li .text strong {
+      display: block;
+      color: #000000;
+      margin-bottom: 2px;
+    }
+
+    .checklist li .text span {
+      color: #444444;
+      font-size: 0.88rem;
+    }
+
+    code {
+      background: #eeeeee;
+      color: #000000;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: 'Consolas', monospace;
+      font-size: 0.88rem;
+      border: 1px solid #cccccc;
+    }
+
+    /* Demo steps */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      background: #f5f5f5;
+      border: 1px solid #cccccc;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .step-num {
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .step-body {
+      padding: 16px 18px;
+    }
+
+    .step-body h3 {
+      font-size: 1rem;
+      color: #000000;
+      margin-bottom: 6px;
+    }
+
+    .step-body p {
+      font-size: 0.9rem;
+      color: #444444;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .say {
+      background: #ffffff;
+      border-left: 3px solid #000000;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.88rem;
+      color: #000000;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .say::before {
+      content: 'SAY: ';
+      font-weight: 700;
+      font-style: normal;
+      color: #000000;
+    }
+
+    /* Commands table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      border: 1px solid #cccccc;
+    }
+
+    thead tr {
+      background: #000000;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 12px 16px;
+      color: #ffffff;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #cccccc;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #f5f5f5;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #ffffff;
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+
+    tbody td:first-child {
+      font-family: 'Consolas', monospace;
+      font-size: 1rem;
+      color: #000000;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tbody td:nth-child(2) {
+      color: #000000;
+    }
+
+    tbody td:nth-child(3) {
+      color: #444444;
+      font-size: 0.85rem;
+    }
+
+    /* Troubleshooting table */
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      border: 1px solid #cccccc;
+    }
+
+    .trouble-table thead tr {
+      background: #555555;
+    }
+
+    .trouble-table thead th {
+      text-align: left;
+      padding: 12px 16px;
+      color: #ffffff;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .trouble-table tbody tr {
+      border-bottom: 1px solid #cccccc;
+    }
+
+    .trouble-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .trouble-table tbody tr:nth-child(odd) {
+      background: #f5f5f5;
+    }
+
+    .trouble-table tbody tr:nth-child(even) {
+      background: #ffffff;
+    }
+
+    .trouble-table tbody td {
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+
+    .trouble-table tbody td:first-child {
+      color: #000000;
+      font-weight: 600;
+    }
+
+    .trouble-table tbody td:nth-child(2) {
+      color: #000000;
+    }
+
+    /* Speech box */
+    .speech {
+      background: #f5f5f5;
+      border: 1px solid #cccccc;
+      border-radius: 10px;
+      padding: 24px 28px;
+      line-height: 1.8;
+      font-size: 0.95rem;
+      color: #000000;
+    }
+
+    .speech p {
+      margin-bottom: 16px;
+    }
+
+    .speech p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      color: #888888;
+      font-size: 0.8rem;
+      margin-top: 60px;
+      border-top: 1px solid #cccccc;
+      padding-top: 20px;
+    }
+
+    /* Print styles */
+    @media print {
+      body { padding: 0; }
+      section { page-break-inside: avoid; }
+      .step { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <h1>ESP32 Automated Sentry Turret</h1>
+      <p>Science Fair 2026 &mdash; Grade 8 &mdash; Demo Guide</p>
+    </header>
+
+    <!-- PRE-DEMO CHECKLIST -->
+    <section>
+      <h2>Before You Start &mdash; Checklist</h2>
+      <ul class="checklist">
+        <li>
+          <span class="num">1</span>
+          <div class="text">
+            <strong>Run the flash fix</strong>
+            <span>Open Git Bash and run: <code>bash ~/ESP32/fix_flash_wp.sh</code></span>
+          </div>
+        </li>
+        <li>
+          <span class="num">2</span>
+          <div class="text">
+            <strong>Upload the main sketch</strong>
+            <span>Open <code>ESP32_Sentry_Turret.ino</code> in Arduino IDE and click Upload</span>
+          </div>
+        </li>
+        <li>
+          <span class="num">3</span>
+          <div class="text">
+            <strong>Load a Nerf dart</strong>
+            <span>Insert one dart into the Nerf Jolt before powering on</span>
+          </div>
+        </li>
+        <li>
+          <span class="num">4</span>
+          <div class="text">
+            <strong>Set up the demo area</strong>
+            <span>Place the turret on a table. Clear a 1&ndash;2 metre zone in front of it</span>
+          </div>
+        </li>
+        <li>
+          <span class="num">5</span>
+          <div class="text">
+            <strong>Turn on the battery pack</strong>
+            <span>Powers the pan and tilt servos (MG996R). Make sure the ground wire connects to ESP32 GND</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- DEMO STEPS -->
+    <section>
+      <h2>Demo Steps</h2>
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Power On</h3>
+            <p>Plug in the ESP32. The green LED starts blinking &mdash; PIR sensor is warming up (10 seconds).</p>
+            <div class="say">The system is powering on. The green light blinking means the PIR motion sensor is warming up &mdash; it needs a few seconds to calibrate to the room temperature.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>System Armed</h3>
+            <p>After 10 seconds the green LED goes solid. Turret centers itself at 90&deg;.</p>
+            <div class="say">The green light is now solid &mdash; the turret is armed and waiting for motion.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Trigger the PIR</h3>
+            <p>Walk into the detection zone. The buzzer beeps twice and the green LED turns off.</p>
+            <div class="say">I just walked into the detection zone. The PIR sensor detected my body heat and triggered the alarm.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Scanning</h3>
+            <p>The pan servo sweeps left to right while the ultrasonic sensor pings for targets.</p>
+            <div class="say">Now the turret is scanning. The pan servo rotates the ultrasonic sensor across the room. It sends out a sound pulse and listens for the echo &mdash; like a bat &mdash; and calculates the distance at every angle.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Target Locked</h3>
+            <p>The turret snaps to your angle. Tilt adjusts based on distance (close = tilt down, far = tilt up).</p>
+            <div class="say">Target locked. It found the closest object and calculated which angle I&rsquo;m at. The tilt servo also adjusted based on distance &mdash; close targets tilt down, far targets tilt up.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h3>Fire</h3>
+            <p>Three short beeps, one long beep, then the trigger servo fires the dart.</p>
+            <div class="say">Three warning beeps, then fire. The trigger servo pulls the Nerf gun trigger, launches the dart, and then releases.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-body">
+            <h3>Cooldown &amp; Reset</h3>
+            <p>Turret returns to center, waits 3 seconds, green LED comes back on. Now reload and repeat.</p>
+            <div class="say">The system goes into cooldown &mdash; I&rsquo;d reload the dart here &mdash; and then it automatically re-arms and is ready to detect the next target.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SERIAL COMMANDS -->
+    <section>
+      <h2>Serial Monitor Commands</h2>
+      <p style="color:#444444; font-size:0.88rem; margin-bottom:16px;">Baud: <code>115200</code> &nbsp;|&nbsp; Line ending: <code>Newline</code></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>What it does</th>
+            <th>When to use it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A</td>
+            <td>Toggle auto mode ON / OFF</td>
+            <td>Stop the turret from looping</td>
+          </tr>
+          <tr>
+            <td>R</td>
+            <td>Reset to IDLE, servos return to center</td>
+            <td>Restart demo from the beginning</td>
+          </tr>
+          <tr>
+            <td>M</td>
+            <td>Force start a scan (skips PIR)</td>
+            <td>PIR doesn't trigger on its own</td>
+          </tr>
+          <tr>
+            <td>F</td>
+            <td>Force fire immediately</td>
+            <td>Manual fire for demo</td>
+          </tr>
+          <tr>
+            <td>D</td>
+            <td>Read and print current distance</td>
+            <td>Check ultrasonic sensor is working</td>
+          </tr>
+          <tr>
+            <td>P</td>
+            <td>Print current state, angle, distance, mode</td>
+            <td>Debug what the system thinks it's doing</td>
+          </tr>
+          <tr>
+            <td>T[angle]</td>
+            <td>Move tilt servo to angle</td>
+            <td>Manually aim tilt (e.g. <code>T90</code>, <code>T120</code>)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- TROUBLESHOOTING -->
+    <section>
+      <h2>If Something Goes Wrong</h2>
+      <table class="trouble-table">
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Turret stuck in a loop</td>
+            <td>Type <code>A</code> in Serial Monitor to turn off auto mode</td>
+          </tr>
+          <tr>
+            <td>PIR doesn't trigger</td>
+            <td>Type <code>M</code> to force-start the scan manually</td>
+          </tr>
+          <tr>
+            <td>Dart doesn't fire</td>
+            <td>Type <code>F</code> to force fire, check dart is loaded</td>
+          </tr>
+          <tr>
+            <td>Pan servo not moving</td>
+            <td>Check battery pack is ON and ground wire connects to ESP32 GND</td>
+          </tr>
+          <tr>
+            <td>Upload fails (MD5 mismatch)</td>
+            <td>Run <code>bash ~/ESP32/fix_flash_wp.sh</code> then re-upload</td>
+          </tr>
+          <tr>
+            <td>ESP32 won't connect</td>
+            <td>Unplug &rarr; hold BOOT &rarr; plug in &rarr; release BOOT after 2s</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SPEECH -->
+    <section>
+      <h2>Science Fair Speech (~2 minutes)</h2>
+      <div class="speech">
+        <p>Hi, my name is [Name], and my project is an Automated Sentry Turret built using an ESP32 microcontroller.</p>
+        <p>The question I explored was: <em>Can a low-cost microcontroller be programmed to detect, track, and respond to a moving target automatically?</em></p>
+        <p>My turret uses three sensors. First, a PIR &mdash; or Passive Infrared &mdash; sensor detects body heat when a person enters the area. That wakes the system up. Second, an HC-SR04 ultrasonic sensor, mounted on a servo motor, sweeps across the room sending out sound pulses and measuring how long the echo takes to come back. This tells the system the distance to any object at each angle. Third, the system calculates which angle has the closest target and aims at it.</p>
+        <p>Once it&rsquo;s aimed, a second servo adjusts the tilt &mdash; up for far targets, down for close ones. Then a third servo pulls the Nerf gun trigger.</p>
+        <p>The whole system runs as a state machine &mdash; five states: Idle, Scanning, Targeting, Firing, and Cooldown. Each state has specific rules and transitions. This is how real-world systems like security cameras and autonomous robots are designed.</p>
+        <p>What I learned is that hardware and software have to work together very precisely. I ran into problems like flash chip write-protection, servo timing conflicts, and sensor noise. Debugging those problems taught me more than the programming itself.</p>
+        <p>For future improvements, I&rsquo;d add a camera with computer vision to identify people versus objects, and a servo-controlled reload mechanism so it can fire multiple times automatically.</p>
+        <p>Thank you &mdash; I&rsquo;m happy to answer any questions or give you a live demo.</p>
+      </div>
+    </section>
+
+    <footer>
+      ESP32 Automated Sentry Turret &mdash; Science Fair 2026
+    </footer>
+
+  </div>
+</body>
+</html>

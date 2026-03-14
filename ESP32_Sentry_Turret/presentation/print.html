@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ultimate Threat Detection System - Print Version</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+@page {
+    size: 11in 8.5in;
+    margin: 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+/* ============ SLIDE LAYOUT ============ */
+.slide {
+    width: 11in;
+    height: 8.5in;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.6in 0.8in;
+    background: #0a0a0f;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+}
+
+/* Subtle grid background - static for print */
+.slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+        linear-gradient(rgba(255, 179, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 179, 0, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+}
+
+/* Small target symbol center-top of every slide */
+.slide::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 48px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='22' fill='none' stroke='%23FFB300' stroke-width='1.5' opacity='0.7'/%3E%3Ccircle cx='24' cy='24' r='7' fill='none' stroke='%23FFB300' stroke-width='1' opacity='0.5'/%3E%3Cline x1='24' y1='0' x2='24' y2='14' stroke='%23FFB300' stroke-width='1.5' opacity='0.8'/%3E%3Cline x1='24' y1='34' x2='24' y2='48' stroke='%23FFB300' stroke-width='1.5' opacity='0.8'/%3E%3Cline x1='0' y1='24' x2='14' y2='24' stroke='%23FFB300' stroke-width='1.5' opacity='0.8'/%3E%3Cline x1='34' y1='24' x2='48' y2='24' stroke='%23FFB300' stroke-width='1.5' opacity='0.8'/%3E%3Ccircle cx='24' cy='24' r='2' fill='%23FFB300' opacity='0.9'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.corner-tl, .corner-tr, .corner-bl, .corner-br {
+    display: none;
+}
+
+/* Slide number - hidden */
+.slide-num {
+    display: none;
+}
+
+/* All inner content above the pseudo-element */
+.slide > * { position: relative; z-index: 2; }
+
+/* ============ TITLE SLIDE ============ */
+.title-slide .subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    color: #FFB300;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    opacity: 0.85;
+}
+
+.title-slide h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #FFB300, #5BC8F5, #FFB300);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 28px;
+}
+
+.title-slide .tagline {
+    font-size: 26px;
+    color: #999;
+    font-weight: 300;
+    margin-bottom: 36px;
+}
+
+.title-slide .meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    color: #FFB300;
+    opacity: 0.7;
+}
+
+.title-slide .crosshair {
+    margin-bottom: 36px;
+}
+
+/* Hide target symbol and slide num on title slide */
+.title-slide::after {
+    display: none;
+}
+
+/* ============ CONTENT SLIDES ============ */
+.slide h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 46px;
+    font-weight: 700;
+    color: #FFB300;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.slide .section-line {
+    width: 90px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #FFB300, transparent);
+    margin: 0 auto 32px;
+}
+
+/* Two column layout */
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    width: 100%;
+    max-width: 1400px;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Info cards */
+.card {
+    background: rgba(255, 179, 0, 0.05);
+    border: 1px solid rgba(255, 179, 0, 0.2);
+    border-radius: 8px;
+    padding: 18px 22px;
+}
+
+.card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 17px;
+    color: #5BC8F5;
+    margin-bottom: 8px;
+}
+
+.card p {
+    font-size: 19px;
+    line-height: 1.5;
+    color: #ccc;
+}
+
+/* Feature list */
+.feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    max-width: 1100px;
+    width: 100%;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    font-size: 22px;
+    line-height: 1.45;
+    color: #ccc;
+    padding: 13px 22px;
+    background: rgba(255, 179, 0, 0.04);
+    border-left: 3px solid #FFB300;
+    border-radius: 0 6px 6px 0;
+}
+
+.feature-list li .icon {
+    font-size: 22px;
+    min-width: 32px;
+    text-align: center;
+    color: #FFB300;
+}
+
+.feature-list li strong { color: #FFB300; }
+
+/* State machine flow */
+.state-flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin: 16px 0;
+}
+
+.state-box {
+    background: rgba(255, 179, 0, 0.08);
+    border: 2px solid #FFB300;
+    border-radius: 10px;
+    padding: 16px 28px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFB300;
+    text-align: center;
+    min-width: 130px;
+}
+
+.state-box.active-state {
+    background: rgba(255, 60, 60, 0.15);
+    border-color: #ff5555;
+    color: #ff5555;
+}
+
+.state-arrow {
+    font-size: 28px;
+    color: #FFB300;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* Sensor grid */
+.sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    max-width: 1300px;
+    width: 100%;
+}
+
+.sensor-card {
+    background: rgba(255, 179, 0, 0.04);
+    border: 1px solid rgba(255, 179, 0, 0.2);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+}
+
+.sensor-card .sensor-icon { font-size: 46px; margin-bottom: 10px; }
+
+.sensor-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    color: #5BC8F5;
+    margin-bottom: 8px;
+}
+
+.sensor-card p { font-size: 17px; color: #aaa; line-height: 1.4; }
+
+/* Stats row */
+.stats-row {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.stat { text-align: center; }
+
+.stat .num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: #FFB300;
+    line-height: 1;
+}
+
+.stat .label {
+    font-size: 16px;
+    color: #777;
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Science grid */
+.science-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    max-width: 1300px;
+    width: 100%;
+}
+
+.science-card {
+    background: rgba(0, 120, 200, 0.06);
+    border: 1px solid rgba(91, 200, 245, 0.25);
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.science-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    color: #5BC8F5;
+    margin-bottom: 10px;
+}
+
+.science-card .formula {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    color: #FFB300;
+    background: rgba(255, 179, 0, 0.08);
+    padding: 9px 14px;
+    border-radius: 6px;
+    margin: 8px 0;
+    text-align: center;
+}
+
+.science-card p { font-size: 17px; color: #bbb; line-height: 1.5; }
+
+/* Code block */
+.code-block {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 179, 0, 0.2);
+    border-radius: 10px;
+    padding: 22px 28px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    line-height: 1.7;
+    color: #ccc;
+    width: 100%;
+}
+
+.code-block .keyword { color: #ff79c6; }
+.code-block .function { color: #69f0ae; }
+.code-block .comment { color: #6272a4; }
+.code-block .number { color: #bd93f9; }
+
+/* Conclusion */
+.conclusion-points {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1100px;
+    width: 100%;
+}
+
+.conclusion-point {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 22px;
+    background: rgba(255, 179, 0, 0.04);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 179, 0, 0.12);
+    font-size: 21px;
+    color: #ccc;
+}
+
+.conclusion-point .check { font-size: 26px; color: #FFB300; }
+
+/* Wiring table */
+.wiring-table {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    font-size: 20px;
+}
+
+.wiring-table th {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    color: #FFB300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 13px 22px;
+    border-bottom: 2px solid rgba(255, 179, 0, 0.35);
+    text-align: left;
+}
+
+.wiring-table td {
+    padding: 11px 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    color: #ccc;
+}
+
+.wiring-table tr:nth-child(even) td { background: rgba(255,179,0,0.03); }
+
+.pin-badge {
+    font-family: 'Share Tech Mono', monospace;
+    background: rgba(255, 179, 0, 0.15);
+    color: #FFB300;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Thank you */
+.thankyou h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 80px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #FFB300, #5BC8F5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+}
+
+.thankyou .tagline { font-size: 32px; color: #777; font-weight: 300; }
+
+.thankyou .demo-text {
+    font-size: 30px;
+    color: #FFB300;
+    margin-top: 20px;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+</style>
+</head>
+<body>
+
+    <!-- SLIDE 1: TITLE -->
+    <div class="slide title-slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">1 / 15</div>
+        <div class="subtitle">// Science Fair 2026</div>
+        <svg class="crosshair" width="130" height="130" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
+            <!-- Outer circle -->
+            <circle cx="65" cy="65" r="62" fill="none" stroke="#FFB300" stroke-width="2" opacity="0.7"/>
+            <!-- Inner circle -->
+            <circle cx="65" cy="65" r="20" fill="none" stroke="#FFB300" stroke-width="1.5" opacity="0.5"/>
+            <!-- Crosshair lines -->
+            <line x1="65" y1="0" x2="65" y2="40" stroke="#FFB300" stroke-width="2" opacity="0.7"/>
+            <line x1="65" y1="90" x2="65" y2="130" stroke="#FFB300" stroke-width="2" opacity="0.7"/>
+            <line x1="0" y1="65" x2="40" y2="65" stroke="#FFB300" stroke-width="2" opacity="0.7"/>
+            <line x1="90" y1="65" x2="130" y2="65" stroke="#FFB300" stroke-width="2" opacity="0.7"/>
+            <!-- Center dot -->
+            <circle cx="65" cy="65" r="3" fill="#FFB300" opacity="0.9"/>
+        </svg>
+        <h1>THE ULTIMATE THREAT<br>DETECTION SYSTEM</h1>
+        <div class="tagline">An Autonomous Sentry Turret Powered by ESP32</div>
+        <div class="meta">Grade 7 &bull; Engineering &amp; Computer Science</div>
+    </div>
+
+    <!-- SLIDE 2: THE PROBLEM -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">2 / 15</div>
+        <h2>THE PROBLEM</h2>
+        <div class="section-line"></div>
+        <ul class="feature-list">
+            <li>
+                <span class="icon">?</span>
+                <span><strong>How can we, as 7th graders, independently design, debug, and build a fully autonomous system using professional-grade tools?</strong></span>
+            </li>
+            <li>
+                <span class="icon">&gt;</span>
+                <span>As technology advances, students need <strong>hands-on experience</strong> with real engineering tools — microcontrollers, sensors, and AI-assisted development</span>
+            </li>
+            <li>
+                <span class="icon">&gt;</span>
+                <span>This project explores <strong>project management, debugging under pressure,</strong> and working with AI as a collaborator</span>
+            </li>
+            <li>
+                <span class="icon">&gt;</span>
+                <span>The result: a fully autonomous sentry turret built from scratch within a <strong>6-week timeline</strong></span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- SLIDE 3: THE HYPOTHESIS -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">3 / 15</div>
+        <h2>HYPOTHESIS</h2>
+        <div class="section-line"></div>
+        <div class="card" style="max-width: 1000px; padding: 50px; border-color: rgba(91, 200, 245, 0.3);">
+            <p style="font-size: 28px; color: #e0e0e0; text-align: center; line-height: 1.7;">
+                "A 7th grade student, starting with <strong style="color: #5BC8F5;">independent research</strong> and later using <strong style="color: #5BC8F5;">AI tools, structured project management, and iterative debugging</strong>, can design and build a fully autonomous embedded system within a <strong style="color: #FFB300;">6-week deadline</strong>."
+            </p>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: HOW IT WORKS -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">4 / 15</div>
+        <h2>HOW IT WORKS</h2>
+        <div class="section-line"></div>
+        <div class="state-flow">
+            <div class="state-box">IDLE</div>
+            <div class="state-arrow">&rarr;</div>
+            <div class="state-box">SCANNING</div>
+            <div class="state-arrow">&rarr;</div>
+            <div class="state-box">TARGETING</div>
+            <div class="state-arrow">&rarr;</div>
+            <div class="state-box active-state">FIRING</div>
+            <div class="state-arrow">&rarr;</div>
+            <div class="state-box">COOLDOWN</div>
+        </div>
+        <div style="height: 24px;"></div>
+        <ul class="feature-list">
+            <li><span class="icon">1.</span><span><strong>IDLE</strong> &mdash; Waits for the PIR sensor to detect body heat (infrared radiation)</span></li>
+            <li><span class="icon">2.</span><span><strong>SCANNING</strong> &mdash; Pan servo sweeps 15&deg; to 165&deg;, ultrasonic pings at each angle</span></li>
+            <li><span class="icon">3.</span><span><strong>TARGETING</strong> &mdash; Aims at the closest object, adjusts tilt for distance</span></li>
+            <li><span class="icon">4.</span><span><strong>FIRING</strong> &mdash; Warning buzzer, then trigger servo pulls the Nerf trigger</span></li>
+            <li><span class="icon">5.</span><span><strong>COOLDOWN</strong> &mdash; Returns to center, waits 3 seconds to reload</span></li>
+        </ul>
+    </div>
+
+    <!-- SLIDE 5: COMPONENTS -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">5 / 15</div>
+        <h2>COMPONENTS</h2>
+        <div class="section-line"></div>
+        <div class="sensor-grid">
+            <div class="sensor-card">
+                <div class="sensor-icon">&#x1F9E0;</div>
+                <h3>ESP32 WROVER</h3>
+                <p>The brain. Dual-core processor running at 240 MHz with Wi-Fi and Bluetooth</p>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">&#x1F441;</div>
+                <h3>PIR Sensor</h3>
+                <p>Detects infrared radiation from body heat. Triggers the scanning phase</p>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">&#x1F4E1;</div>
+                <h3>Ultrasonic Sensor</h3>
+                <p>HC-SR04 sends 40kHz sound pulses. Measures distance using echo time</p>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">&#x2699;</div>
+                <h3>Pan Servo (MG996R)</h3>
+                <p>High-torque metal gear motor. Rotates turret left/right for scanning</p>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">&#x2699;</div>
+                <h3>Tilt Servo (MG996R)</h3>
+                <p>Adjusts gun angle up/down based on target distance</p>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">&#x1F52B;</div>
+                <h3>Trigger Servo (SG90)</h3>
+                <p>Micro servo pulls the Nerf Jolt trigger to fire the dart</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: THE SCIENCE -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">6 / 15</div>
+        <h2>THE SCIENCE</h2>
+        <div class="section-line"></div>
+        <div class="science-grid">
+            <div class="science-card">
+                <h3>Ultrasonic Distance</h3>
+                <div class="formula">Distance = (Time &times; 340) / 2</div>
+                <p>Sound travels at 340 m/s. We send a pulse, time the echo, and calculate distance. Dividing by 2 because sound travels there AND back.</p>
+            </div>
+            <div class="science-card">
+                <h3>Infrared Detection</h3>
+                <div class="formula">All warm bodies emit IR</div>
+                <p>The PIR sensor detects changes in infrared radiation. When a person walks by, the sensor registers the heat difference against the background.</p>
+            </div>
+            <div class="science-card">
+                <h3>PWM Servo Control</h3>
+                <div class="formula">1ms = 0&deg; &nbsp;|&nbsp; 1.5ms = 90&deg; &nbsp;|&nbsp; 2ms = 180&deg;</div>
+                <p>Servo motors are controlled by pulse width. A 50Hz signal (20ms period) with varying pulse width sets the angle precisely.</p>
+            </div>
+            <div class="science-card">
+                <h3>State Machine Logic</h3>
+                <div class="formula">IF condition THEN next_state</div>
+                <p>The software uses a state machine — a computer science concept where the system is always in one defined state and transitions based on rules.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: THE SKILLS -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">7 / 15</div>
+        <h2>THE SKILLS</h2>
+        <div class="section-line"></div>
+        <div class="science-grid">
+            <div class="science-card">
+                <h3>Project Management</h3>
+                <div class="formula">6-Week Plan &rarr; Daily Milestones</div>
+                <p>Backwards-planned from the science fair date. Weekly goals, daily tasks, and checkpoints kept the project on track under a real deadline.</p>
+            </div>
+            <div class="science-card">
+                <h3>AI-Assisted Development</h3>
+                <div class="formula">Research First &rarr; Then AI Collaboration</div>
+                <p>Spent weeks independently researching feasibility before using Claude AI to write code, debug errors, and problem-solve in real time.</p>
+            </div>
+            <div class="science-card">
+                <h3>Version Control</h3>
+                <div class="formula">Git Repository &rarr; Every Change Tracked</div>
+                <p>Used Git to track all code changes. 13 test sketches written and saved before the final main sketch was complete.</p>
+            </div>
+            <div class="science-card">
+                <h3>Iterative Debugging</h3>
+                <div class="formula">Test &rarr; Fail &rarr; Learn &rarr; Fix &rarr; Repeat</div>
+                <p>Every problem — flash chip bugs, GPIO crashes, servo issues — was diagnosed methodically, solved, and documented for future reference.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: PROJECT TIMELINE -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">8 / 15</div>
+        <h2>PROJECT TIMELINE</h2>
+        <div class="section-line"></div>
+        <div style="display: flex; flex-direction: column; gap: 16px; max-width: 1200px; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="min-width: 120px; font-family: 'Orbitron', sans-serif; font-size: 14px; color: #5BC8F5; text-align: right;">WEEK 1–2</div>
+                <div style="flex: 1; background: rgba(0,150,255,0.08); border: 1px solid rgba(91,200,245,0.25); border-radius: 8px; padding: 16px 22px; font-size: 20px; color: #ccc;">
+                    <strong style="color: #5BC8F5;">Independent Research</strong> — Studied ESP32, sensors, servo mechanics, and project feasibility without AI assistance
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="min-width: 120px; font-family: 'Orbitron', sans-serif; font-size: 14px; color: #5BC8F5; text-align: right;">WEEK 3</div>
+                <div style="flex: 1; background: rgba(0,150,255,0.08); border: 1px solid rgba(91,200,245,0.25); border-radius: 8px; padding: 16px 22px; font-size: 20px; color: #ccc;">
+                    <strong style="color: #5BC8F5;">Design &amp; Planning</strong> — Finalized system design, ordered parts, created day-by-day build schedule
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="min-width: 120px; font-family: 'Orbitron', sans-serif; font-size: 14px; color: #5BC8F5; text-align: right;">WEEK 4</div>
+                <div style="flex: 1; background: rgba(0,150,255,0.08); border: 1px solid rgba(91,200,245,0.25); border-radius: 8px; padding: 16px 22px; font-size: 20px; color: #ccc;">
+                    <strong style="color: #5BC8F5;">Component Testing</strong> — Tested each sensor and servo independently, diagnosed hardware issues
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="min-width: 120px; font-family: 'Orbitron', sans-serif; font-size: 14px; color: #5BC8F5; text-align: right;">WEEK 5</div>
+                <div style="flex: 1; background: rgba(0,150,255,0.08); border: 1px solid rgba(91,200,245,0.25); border-radius: 8px; padding: 16px 22px; font-size: 20px; color: #ccc;">
+                    <strong style="color: #5BC8F5;">Assembly &amp; Coding</strong> — Built the full turret, wrote the state machine, integrated all components
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="min-width: 120px; font-family: 'Orbitron', sans-serif; font-size: 14px; color: #FFB300; text-align: right;">WEEK 6</div>
+                <div style="flex: 1; background: rgba(255,179,0,0.07); border: 1px solid rgba(255,179,0,0.35); border-radius: 8px; padding: 16px 22px; font-size: 20px; color: #ccc;">
+                    <strong style="color: #FFB300;">Testing, Debugging &amp; Presentation</strong> — Final calibration, edge case testing, science fair prep
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: AI AS A TOOL -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">9 / 15</div>
+        <h2>AI AS A TOOL</h2>
+        <div class="section-line"></div>
+        <ul class="feature-list">
+            <li>
+                <span class="icon">1.</span>
+                <span><strong>Research first</strong> — Spent weeks independently understanding ESP32, sensors, and servo mechanics before any AI involvement</span>
+            </li>
+            <li>
+                <span class="icon">2.</span>
+                <span><strong>Code generation</strong> — Used Claude AI to help write the state machine, sensor functions, and servo control code in C++</span>
+            </li>
+            <li>
+                <span class="icon">3.</span>
+                <span><strong>Real-time debugging</strong> — Described errors to Claude and worked through solutions together — flash chip bugs, GPIO crashes, servo wiring</span>
+            </li>
+            <li>
+                <span class="icon">4.</span>
+                <span><strong>Decision support</strong> — Asked Claude to explain trade-offs (e.g. which GPIO pins are safe, which servo has enough torque)</span>
+            </li>
+            <li>
+                <span class="icon">5.</span>
+                <span><strong>Key insight</strong> — AI is a <strong>collaborator, not a replacement</strong> — understanding the problem yourself first makes AI far more effective</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- SLIDE 10: SYSTEM WIRING -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">10 / 15</div>
+        <h2>SYSTEM WIRING</h2>
+        <div class="section-line"></div>
+        <table class="wiring-table">
+            <tr><th>Component</th><th>Pin</th><th>Function</th></tr>
+            <tr><td>Pan Servo (MG996R)</td><td><span class="pin-badge">GPIO 14</span></td><td>Horizontal rotation (15&deg; &ndash; 165&deg;)</td></tr>
+            <tr><td>Tilt Servo (MG996R)</td><td><span class="pin-badge">GPIO 32</span></td><td>Vertical aim (up / level / down)</td></tr>
+            <tr><td>Trigger Servo (SG90)</td><td><span class="pin-badge">GPIO 4</span></td><td>Pulls Nerf Jolt trigger</td></tr>
+            <tr><td>Ultrasonic TRIG</td><td><span class="pin-badge">GPIO 5</span></td><td>Sends 40kHz sound pulse</td></tr>
+            <tr><td>Ultrasonic ECHO</td><td><span class="pin-badge">GPIO 18</span></td><td>Receives echo signal</td></tr>
+            <tr><td>PIR Motion Sensor</td><td><span class="pin-badge">GPIO 27</span></td><td>Detects body heat (infrared)</td></tr>
+            <tr><td>Buzzer</td><td><span class="pin-badge">GPIO 26</span></td><td>Warning beeps before firing</td></tr>
+            <tr><td>Status LED</td><td><span class="pin-badge">GPIO 2</span></td><td>Green = armed and ready</td></tr>
+        </table>
+        <div style="margin-top: 24px; color: #666; font-size: 17px; font-family: 'Share Tech Mono', monospace;">
+            MG996R servos powered by external 6V battery pack &nbsp;|&nbsp; Common ground required
+        </div>
+    </div>
+
+    <!-- SLIDE 11: THE CODE -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">11 / 15</div>
+        <h2>THE CODE</h2>
+        <div class="section-line"></div>
+        <div class="two-col">
+            <div class="col">
+                <div class="code-block">
+                    <span class="comment">// Detect target distance</span><br>
+                    <span style="color:#ff79c6;">long</span> <span style="color:#69f0ae;">readDistance</span>() {<br>
+                    &nbsp;&nbsp;digitalWrite(TRIG, HIGH);<br>
+                    &nbsp;&nbsp;delay(<span style="color:#bd93f9;">10</span>);<br>
+                    &nbsp;&nbsp;digitalWrite(TRIG, LOW);<br>
+                    &nbsp;&nbsp;<span style="color:#ff79c6;">long</span> d = <span style="color:#69f0ae;">pulseIn</span>(ECHO, HIGH);<br>
+                    &nbsp;&nbsp;<span style="color:#ff79c6;">return</span> d * <span style="color:#bd93f9;">0.034</span> / <span style="color:#bd93f9;">2</span>;<br>
+                    }
+                </div>
+                <div style="color: #666; font-size: 16px; font-family: 'Share Tech Mono', monospace; margin-top: 12px;">
+                    Written in C++ using Arduino framework<br>
+                    ~400 lines of code total
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <h3>Key Algorithm</h3>
+                    <p>Minimum-distance scan — sweeps 150&deg; and tracks the closest object angle</p>
+                </div>
+                <div class="card">
+                    <h3>Distance-Based Tilt</h3>
+                    <p>Close target (&lt;50cm) = aim down<br>Far target (&gt;120cm) = aim up<br>Medium = aim level</p>
+                </div>
+                <div class="card">
+                    <h3>Safety Features</h3>
+                    <p>Target verification before firing, warning buzzer, manual override via serial commands, auto/manual toggle</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: RESULTS -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">12 / 15</div>
+        <h2>RESULTS</h2>
+        <div class="section-line"></div>
+        <div class="stats-row">
+            <div class="stat">
+                <div class="num">150</div>
+                <div class="label">cm max range</div>
+            </div>
+            <div class="stat">
+                <div class="num">3&deg;</div>
+                <div class="label">scan precision</div>
+            </div>
+            <div class="stat">
+                <div class="num">5</div>
+                <div class="label">system states</div>
+            </div>
+            <div class="stat">
+                <div class="num">&lt;8</div>
+                <div class="label">sec to fire</div>
+            </div>
+        </div>
+        <div style="height: 16px;"></div>
+        <ul class="feature-list">
+            <li><span class="icon">+</span><span>Successfully detects motion and triggers scanning <strong>every time</strong></span></li>
+            <li><span class="icon">+</span><span>Ultrasonic sensor accurately measures distance within <strong>&plusmn;2 cm</strong></span></li>
+            <li><span class="icon">+</span><span>Pan servo locates the <strong>closest target</strong> in a 150&deg; sweep</span></li>
+            <li><span class="icon">+</span><span>Fires Nerf dart at the confirmed target with <strong>buzzer warning</strong></span></li>
+        </ul>
+    </div>
+
+    <!-- SLIDE 13: CHALLENGES & SOLUTIONS -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">13 / 15</div>
+        <h2>CHALLENGES &amp; SOLUTIONS</h2>
+        <div class="section-line"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; max-width: 1400px; width: 100%;">
+            <div class="science-card">
+                <h3>Flash Write Protection</h3>
+                <p>Boya flash chip re-enabled write protection after every power cycle — uploads failed with MD5 errors. <strong style="color: #FFB300;">Fix:</strong> Custom script clears the protection bit before every upload.</p>
+            </div>
+            <div class="science-card">
+                <h3>GPIO 12 Boot Crash</h3>
+                <p>GPIO 12 is a strapping pin that sets flash voltage. Attaching a servo here corrupted the flash on every boot. <strong style="color: #FFB300;">Fix:</strong> Moved tilt servo to GPIO 32.</p>
+            </div>
+            <div class="science-card">
+                <h3>Servo Power Issues</h3>
+                <p>MG996R servos drew too much current from the ESP32, causing random resets. <strong style="color: #FFB300;">Fix:</strong> External 6V battery pack with common ground.</p>
+            </div>
+            <div class="science-card">
+                <h3>Trigger Mechanism</h3>
+                <p>Hot glue failed under servo torque, detaching the mount mid-test. Servo arm too short to pull the trigger. <strong style="color: #FFB300;">Fix:</strong> Re-glued with longer arm for more mechanical leverage.</p>
+            </div>
+            <div class="science-card">
+                <h3>Serial Port Conflicts</h3>
+                <p>Arduino IDE held COM4 open, blocking command-line tools from accessing the board. <strong style="color: #FFB300;">Fix:</strong> Close IDE before running esptool commands.</p>
+            </div>
+            <div class="science-card">
+                <h3>Download Mode Required</h3>
+                <p>ESP32 sometimes refused to connect during upload. <strong style="color: #FFB300;">Fix:</strong> Manual boot mode — hold BOOT, plug USB, release after 2 seconds.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: CONCLUSION -->
+    <div class="slide">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">14 / 15</div>
+        <h2>CONCLUSION</h2>
+        <div class="section-line"></div>
+        <div class="conclusion-points">
+            <div class="conclusion-point">
+                <span class="check">&#10003;</span>
+                <span><strong>Hypothesis confirmed:</strong> A 7th grader can independently research, design, and build a fully autonomous system within a 6-week deadline</span>
+            </div>
+            <div class="conclusion-point">
+                <span class="check">&#10003;</span>
+                <span><strong>Soft skills mastered:</strong> Project management, deadline planning, debugging under pressure, and AI collaboration</span>
+            </div>
+            <div class="conclusion-point">
+                <span class="check">&#10003;</span>
+                <span><strong>Technical skills learned:</strong> Electronics, C++ programming, state machines, sensor physics, Git version control</span>
+            </div>
+            <div class="conclusion-point">
+                <span class="check">&#10003;</span>
+                <span><strong>Key takeaway:</strong> Understanding the problem yourself first makes AI a far more powerful tool</span>
+            </div>
+            <div class="conclusion-point">
+                <span class="check">&#10003;</span>
+                <span><strong>Future improvements:</strong> Camera vision, multiple targets, longer range, Wi-Fi remote control</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: THANK YOU -->
+    <div class="slide thankyou">
+        <div class="corner-tl"></div><div class="corner-tr"></div>
+        <div class="corner-bl"></div><div class="corner-br"></div>
+        <div class="slide-num">15 / 15</div>
+        <h1>THANK YOU</h1>
+        <div class="tagline">Questions?</div>
+        <div style="height: 30px;"></div>
+        <div class="demo-text">&#9654; LIVE DEMO AVAILABLE</div>
+        <div style="margin-top: 40px; font-family: 'Share Tech Mono', monospace; font-size: 16px; color: #555;">
+            Built with ESP32 &bull; Arduino &bull; C++ &bull; 3 Servos &bull; PIR &bull; Ultrasonic &bull; Science Fair 2026
+        </div>
+    </div>
+
+</body>
+</html>

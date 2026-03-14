@@ -1,0 +1,17 @@
+# Claude memory files
+.claude/
+
+# Binary test files
+*.bin
+
+# Windows launcher
+launch_claude_esp32.bat
+
+# Arduino build output
+build/
+**/build/
+
+# Large image files
+images/
+*.HEIC
+*.heic
